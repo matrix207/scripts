@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmltest>
+	<Remote name="testpc" ip="192.168.1.56" port="1022"/>
+	<version>3.6.12</version>
+	<os>Centos 5.2</os>
+	<memory>4.0</memory>
+	<cpu>3.8</cpu>
+</xmltest>
