@@ -1,4 +1,8 @@
 #!/bin/bash
+################################################################################
+# From: http://hi.baidu.com/wylhistory/item/dada5addaf2e6717e0f46fa9
+################################################################################
+
 if [ $# -lt 1 ];then
     echo "you must specify a target parameter"
     exit
