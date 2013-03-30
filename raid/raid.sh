@@ -31,7 +31,7 @@ DIR_RAID=/dev/md0
 DIR_RAID_SED="\/dev\/md0"
 DIR_RAID_MOUNT=/mnt/raid1
 CONF_RAID=/etc/mdadm.conf
-HOME_HOST=u2baynas
+HOME_HOST=raidtest
 FS_TYPE=ext3
 FSTAB=/etc/fstab
 ############################################################
@@ -240,7 +240,7 @@ raid_status() {
 # raid stop and clear superblock
 ############################################################
 raid_stop() {
-	#-bash-4.0# cat /proc/mdstat 
+	#[root@localhost ~]# cat /proc/mdstat 
 	#Personalities : [linear] [raid0] [raid1] 
 	#md0 : active raid1 sdb[1] sda[0]
 	#      976761424 blocks super 1.2 [2/2] [UU]
@@ -248,7 +248,7 @@ raid_stop() {
 	#unused devices: <none>
 
 
-	#-bash-4.0# cat /proc/mdstat 
+	#[root@localhost ~]# cat /proc/mdstat 
 	#Personalities : [linear] [raid0] [raid1] 
 	#md127 : inactive sdb[0](S)
 	#      976761560 blocks super 1.2
