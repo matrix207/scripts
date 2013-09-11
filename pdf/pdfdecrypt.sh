@@ -26,6 +26,8 @@ i=0
 for j in *.pdf
 do
 	i=$(( i + 1 ))
+	# add 1000 to make the new file name sequence, special 
+	# for command 'pdftk *.pdf ...'
 	file_name=$(( i + 1000 ))
 	# qpdf --password= --decrypt encrypted.pdf decrypted.pdf
 	# for empty password 
