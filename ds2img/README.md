@@ -11,6 +11,9 @@ e.g:
 
 	python ds2img.py t.h t.dot
 
+###TODO
+implement relation with structures
+
 ###Reference
 * [使用graphviz画数据结构](http://emacser.com/emacs_graphviz_ds.htm)
 * [graphviz for Data Structures](http://www.graphviz.org/content/datastruct)
