@@ -32,3 +32,4 @@ Waiting for your advices
 * [python循环遍历字典元素](http://www.cnblogs.com/skyhacker/archive/2012/01/27/2330177.html)
 * [Python的字典操作](http://blog.csdn.net/nrs12345/article/details/4869272)
 * [★★★python解析ini文件](http://blog.csdn.net/feixin620/article/details/4209783)
+* [python_getopt解析命令行输入参数的使用](http://blog.csdn.net/xiaocaiju/article/details/7590106)
