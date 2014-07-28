@@ -1,5 +1,5 @@
 ###What it is
-**ds2img**.py (**D**ata**S**tructure **T**o **I**mage) 
+**ds2img**.py (DataStructure To Image) 
 
 A python script transfer c header file which contains lots of data structures 
 to a dot script, and then use dot to convert to a image file
@@ -19,6 +19,10 @@ to a dot script, and then use dot to convert to a image file
 
 ###TODO
 Waiting for your advices
+
+###Warning
+1. Not support structure contain other structure!
+2. Not support multi-lines comment
 
 ###Reference
 * [★★★使用graphviz画数据结构](http://emacser.com/emacs_graphviz_ds.htm)

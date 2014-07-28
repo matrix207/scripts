@@ -5,6 +5,8 @@
 # You can get the latest version from: 
 # https://github.com/matrix207/scripts/blob/master/ds2img/ds2img.py
 #
+# Warning: Not support structure contain other structure!
+# 
 # Depends:
 #     1. python
 #     2. graphviz
@@ -98,12 +100,19 @@ def generate_relation(output_file, structs_name, structs):
 	for a in structs_name:           # structs_name[a] is structure name
 		for b in structs:            # b is structure name 
 			for c in structs[b]:     # c is member index, structs[b][c] is member name
-				if structs_name[a] in structs[b][c]:
+			    # only match structure name
+				tmp = structs[b][c].split(' ')
+				#if structs_name[a] in structs[b][c]:
+				if tmp[1]==structs_name[a]:
 					#print "%s contain %s\n" % (b,structs_name[a])
 					#print "%s:<f%d> -> %s:f0\n" % (b,c,structs_name[a])
 					print>>f, "node_%s:<f%d> -> node_%s:f0;" % (b,c,structs_name[a])
 	print>>f, ""
 	f.close()
+
+def clean_multi_space(line):
+	line = re.sub(r' +', ' ', line)
+	return line
 
 def clean_array_size(line):
 	line = re.sub(r'\[.+\]', '[]', line)
@@ -132,7 +141,7 @@ def struct2dot(input_file, output_file):
 		if not line: 
 			break
 		# skip the comment line
-		pos = line.find("/*")
+		pos = line.find("/")
 		if pos == 0:
 			continue
 		if pos > 0:
@@ -153,12 +162,13 @@ def struct2dot(input_file, output_file):
 				if len(line) == 0:
 					continue
 				# skip the comment line
-				pos = line.find("/*")
+				pos = line.find("/")
 				if pos == 0:
 					continue
 				if pos > 0:
 					line = handle_comment(line)
 				line = clean_specify_dirty(line)
+				line = clean_multi_space(line)
 				m = re.match('^};$',line)
 				if m: # Find structure end
 					generate_struct_end(output_file)
