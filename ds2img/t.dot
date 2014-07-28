@@ -1,8 +1,7 @@
 /**********************************************
 * Auto generate by ds2img.py
-* source: https://github.com/matrix207/scripts/blob/master/ds2img/ds2img.py
 * Author:  matrix207
-* Date  :  2014-07-28 10:50:57
+* Date  :  2014-07-28 15:01:02
 **********************************************/
 
 digraph DS2IMG {
@@ -270,5 +269,33 @@ subgraph cluster_ua_entry {
 |<f5>u8 ascq;\n\
 "];
 }
+
+#relation 
+node_iscsi_target:<f4> -> node_iscsi_sess_param:f0;
+node_iscsi_session:<f8> -> node_iscsi_sess_param:f0;
+node_iscsi_target:<f5> -> node_iscsi_trgt_param:f0;
+node_iscsi_session:<f3> -> node_tio:f0;
+node_iscsi_cmnd:<f9> -> node_tio:f0;
+node_iscsi_sess_param:<f3> -> node_tio:f0;
+node_iscsi_conn:<f27> -> node_tio:f0;
+node_iscsi_target:<f10> -> node_network_thread_info:f0;
+node_iscsi_target:<f11> -> node_worker_thread:f0;
+node_worker_thread:<f3> -> node_worker_thread:f0;
+node_iscsi_target:<f11> -> node_worker_thread_info:f0;
+node_worker_thread:<f3> -> node_worker_thread_info:f0;
+node_iscsi_trgt_param:<f2> -> node_target_type:f0;
+node_iscsi_session:<f2> -> node_iscsi_target:f0;
+node_iet_volume:<f4> -> node_iscsi_target:f0;
+node_iet_volume:<f6> -> node_iscsi_queue:f0;
+node_iscsi_cmnd:<f5> -> node_iet_volume:f0;
+node_ua_entry:<f2> -> node_iscsi_session:f0;
+node_iscsi_conn:<f2> -> node_iscsi_session:f0;
+node_iscsi_cmnd:<f4> -> node_iscsi_conn:f0;
+node_iscsi_cmnd:<f6> -> node_iscsi_pdu:f0;
+node_iscsi_queue:<f2> -> node_iscsi_cmnd:f0;
+node_iscsi_cmnd:<f19> -> node_iscsi_cmnd:f0;
+node_target_type:<f2> -> node_iscsi_cmnd:f0;
+node_iscsi_conn:<f18> -> node_iscsi_cmnd:f0;
+node_iscsi_conn:<f24> -> node_iscsi_cmnd:f0;
 
 }

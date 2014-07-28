@@ -2,20 +2,26 @@
 #####################################################################
 # Generate dot script file from c file, which have lots of structures
 #
+# You can get the latest version from: 
+# https://github.com/matrix207/scripts/blob/master/ds2img/ds2img.py
+#
 # Depends:
 #     1. python
 #     2. graphviz
 #
 # History:
+#    v1.0  2014-07-28  Dennis  implement generate_relation function
+#                              add parse option funtion
 #    v0.1  2014-07-27  Dennis  Create
 #####################################################################
 
 import os
 import re
 import sys
+import getopt
 import datetime
 
-version = "v0.1 Create by Dennis 2014-07-27"
+version = "v1.0 Create by Dennis 2014-07-28"
 debug = 0
 
 def is_comment(line):
@@ -40,9 +46,8 @@ def generate_dot_header(output_file):
 	f=open(output_file,'a+')
 	print>>f, "/**********************************************"
 	print>>f, "* Auto generate by ds2img.py"
-	print>>f, "* source: https://github.com/matrix207/scripts/blob/master/ds2img/ds2img.py"
 	print>>f, "* Author:  matrix207"
-	print>>f, "* Date  :  %s" %  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	print>>f, "* Date  :  %s" % datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	print>>f, "**********************************************/\n"
 	print>>f, "digraph DS2IMG {"
 	print>>f, "	node [shape=record fontsize=12 fontname=Courier style=filled];"
@@ -83,11 +88,21 @@ def generate_struct_end(output_file):
 	print>>f, ""
 	f.close()
 
-# TODO: implement this function
-def generate_relation(output_file):
+def generate_relation(output_file, structs_name, structs):
 	if debug : 
 		print "generating relation"
 	f=open(output_file,'a+')
+	print>>f, "#relation "
+	# structs_name contain all structure name 
+	# structs      contain all structures, include structure name and it's member name
+	for a in structs_name:           # structs_name[a] is structure name
+		for b in structs:            # b is structure name 
+			for c in structs[b]:     # c is member index, structs[b][c] is member name
+				if structs_name[a] in structs[b][c]:
+					#print "%s contain %s\n" % (b,structs_name[a])
+					#print "%s:<f%d> -> %s:f0\n" % (b,c,structs_name[a])
+					print>>f, "node_%s:<f%d> -> node_%s:f0;" % (b,c,structs_name[a])
+	print>>f, ""
 	f.close()
 
 def clean_array_size(line):
@@ -110,9 +125,8 @@ def struct2dot(input_file, output_file):
 	generate_dot_header(output_file)
 	reader = open(input_file, 'r')
 	i = 1
-	struct_name = {}
-	j = 1
-	member_name = {}
+	structs = {}
+	structs_name = {}
 	while True: 
 		line = reader.readline()
 		if not line: 
@@ -125,15 +139,16 @@ def struct2dot(input_file, output_file):
 			handle_comment(line)
 		m = re.match('^struct (\w+) {$',line)
 		if m: # Find structure start
-			struct_name[i] = m.group(1)
+			structs_name[i] = m.group(1)
+			st_name = m.group(1)
 			i += 1
 			generate_struct_header(output_file, m.group(1))
-			index = 1
+			structs[m.group(1)] = {}
+			j = 1
 			while True:
 				line = reader.readline()
 				if not line: 
 					break
-				line = line.strip('\n')
 				line = line.strip();
 				if len(line) == 0:
 					continue
@@ -148,11 +163,11 @@ def struct2dot(input_file, output_file):
 				if m: # Find structure end
 					generate_struct_end(output_file)
 					break
-				generate_struct_member(output_file, index, line)
-				index += 1
-	print struct_name
+				structs[st_name][j] = line
+				generate_struct_member(output_file, j, line)
+				j += 1
 	reader.close()
-	generate_relation(output_file)
+	generate_relation(output_file, structs_name, structs)
 	generate_dot_end(output_file)
 
 def dot2png(input_file, output_file):
@@ -188,22 +203,58 @@ def find_comment(input_file):
 	reader.close()
 
 def usage(bin_file):
-	print 'Usage: ' + bin_file + ' [INPUT_FILE] ' + '[OUTPUT_FILE]'
+	print "Usage: %s -i INPUT_FILE -f png|svg -o OUTPUT_FILE [-d DOT_FILE]" % bin_file
+	print "      -i  input file which have structures"
+	print "      -f  image fomat, only support png and svg"
+	print "      -o  output file, image file"
+	print "      -d  dot script file, default is tmp.dot"
+	print "  e.g:\n\tpython %s -i t.h -f png -o t.png" % bin_file
+	sys.exit(1)
 
 if __name__ == '__main__':
 	paramlen = len(sys.argv)
-	if paramlen != 3:
-		usage(sys.argv[0])
-		sys.exit(1)
 	
-	clean_file(sys.argv[2])
+	config = {  
+		"input":"",  
+		"format":"",  
+		"output":"",  
+		"dotfile":"tmp.dot",  
+	}  	
+	opts, args = getopt.getopt(sys.argv[1:], 'hi:f:o:d:',
+		[  
+		'input=',
+		'format=',
+		'output=',
+		'dotfile=',
+		'help'  
+		]  
+	)	
 
-	#test(sys.argv[1], sys.argv[2])
-	struct2dot(sys.argv[1], sys.argv[2])
+	for option, value in opts:  
+		if  option in ["-h","--help"]:  
+			usage(sys.argv[0])
+		elif option in ['--input', '-i']:  
+			config["input"] = value  
+		elif option in ['--output', '-o']:  
+			config["output"] = value  
+		elif option in ['--format', '-f']:  
+			config["format"] = value  
+		elif option in ['--dotfile', '-d']:  
+			config["dotfile"] = value  
+		else:
+			usage(sys.argv[0])
+
+	if config["input"] == "" or config["output"]=="" or config["format"]=="" :
+		usage(sys.argv[0])
+	
+
+	clean_file(config["dotfile"])
+
+	struct2dot(config["input"], config["dotfile"])
 
 	# generate graphic
 	filename = os.path.basename(sys.argv[1]) 
 	png_file = filename + ".png"
-	dot2png(sys.argv[2], png_file)
+	dot2png(config["dotfile"], config["output"])
 
 	print "Done"
