@@ -32,6 +32,8 @@ Reference:
 * [Linux软Raid配置](http://david0341.iteye.com/blog/382399)
 * [mdadm使用详解及RAID 5简单分析](http://blog.csdn.net/sense5/article/details/1828868)
 
+###genmk
+a script for generating configure file, which can use to generate Makefile
 
 ###ds2img
 ================================================================================
