@@ -180,8 +180,8 @@ def struct2dot(input_file, output_file):
 	generate_relation(output_file, structs_name, structs)
 	generate_dot_end(output_file)
 
-def dot2png(input_file, output_file):
-	cmdline = "dot -Tpng " + input_file + " -o " + output_file
+def dot2png(input_file, image_format, output_file):
+	cmdline = "dot -T%s %s -o %s" % (image_format, input_file, output_file)
 	if debug:
 		print cmdline
 	os.system(cmdline)
@@ -265,6 +265,6 @@ if __name__ == '__main__':
 	# generate graphic
 	filename = os.path.basename(sys.argv[1]) 
 	png_file = filename + ".png"
-	dot2png(config["dotfile"], config["output"])
+	dot2png(config["dotfile"], config["format"], config["output"])
 
 	print "Done"
