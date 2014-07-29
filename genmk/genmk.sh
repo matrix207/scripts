@@ -3,13 +3,14 @@
 # Auto generate configure file
 #
 # History:
-#   2014/07/29 v0.1.0 Dennis Create
+#   2014/07/29 v0.2 Dennis Use which to check dependencies
+#   2014/07/29 v0.1 Dennis Create
 ############################################################
 
 ############################################################
 # Version
 ############################################################
-VERSION=0.1.0
+VERSION=0.2
 
 ############################################################
 # Debug Configs
@@ -37,6 +38,8 @@ decho() {
 	if test $DEBUG -eq 1 ; then
 		printf "$_ERR_MSG_FMT" $(date +%F.%T.%N) ${BASH_SOURCE[1]##*/} ${BASH_LINENO[0]} "${@}"
 		#echo ">>>>> $* <<<<<"
+	else
+		echo "${@}"
 	fi
 }
 
@@ -108,8 +111,7 @@ checkdeps() {
 
     for x in "${DEPS[@]}" ; do
         decho "Checking for "$x" ... "
-        #which $x 1> /dev/null 2> /dev/null
-        whereis $x 1> /dev/null 2> /dev/null
+        which $x 1> /dev/null 2> /dev/null
         if [  $? != 0  ] ; then
             decho "Failed! "$x" not found"
             #exit 0
@@ -122,6 +124,7 @@ checkdeps() {
 }
 
 ############################################################
+# WARNING, NOT USE THIS FUNCTION
 # generate configure
 ############################################################
 gen_configure() {
