@@ -4,6 +4,11 @@
 A python script transfer c header file which contains lots of data structures 
 to a dot script, and then use dot to convert to a image file
 
+###Features
+1. convert structures relation to image
+2. support multiple structure files
+3. auto handle comment 
+
 ###How to run
 
 	Usage: ds2imgpy -i INPUT_FILE -f png|svg -o OUTPUT_FILE [-d DOT_FILE]
@@ -16,9 +21,12 @@ to a dot script, and then use dot to convert to a image file
 	e.g:
 
 		python ds2img.py -i t.h -f png -o t.png 
+		python ds2img.py -f png -o t.png -i t.h -i a.h -i b.h
 
 ###TODO
-Waiting for your advices
+1. handle comment info
+2. handle macro info
+3. handle special c syntax characters
 
 ###Warning
 1. Not support structure contain other structure!
