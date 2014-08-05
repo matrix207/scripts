@@ -13,6 +13,7 @@
 #
 # History:
 #    v1.1  2014-08-05  Dennis  support handle multiple structure files
+#                              add to all two shell scripts
 #    v1.0  2014-07-28  Dennis  implement generate_relation function
 #                              add parse option funtion
 #    v0.1  2014-07-27  Dennis  Create
@@ -283,6 +284,9 @@ if __name__ == '__main__':
 		x.close()
 	new_struct_file.close()
 	config["input"] = "xx.h"
+
+	os.system('./rmcomment.sh ' + 'xx.h')
+	os.system('./rm_special.sh ' + 'xx.h')
 
 	clean_file(config["dotfile"])
 
