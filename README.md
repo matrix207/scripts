@@ -2,6 +2,104 @@
 ##My shell scripts
 ================================================================================
 
+###skill for bash 
+================================================================================
+
+1.show line number
+
+	export PS4='+${BASH_SOURCE}:${LINENO}:${FUNCNAME[0]}: '
+
+
+2.debug apart of code
+
+	set -x
+	THE CODE BE DEBUGED
+	set +x
+
+3.add debug flag
+
+code like this:
+
+	DEBUG=0
+	_ERR_HDR_FMT="%.23s %s[%s]: "
+	_ERR_MSG_FMT="${_ERR_HDR_FMT}%s\n"
+
+	_log() {
+		if test $DEBUG -eq 1 ; then
+			printf "$_ERR_MSG_FMT" $(date +%F.%T.%N) ${BASH_SOURCE[1]##*/} ${BASH_LINENO[0]} "${@}"
+		fi
+	}
+
+and run as this:
+
+	DEBUG=1 ./test.sh
+
+
+for more info:
+
+* <http://coolshell.cn/articles/1379.html>
+* <http://www.ibm.com/developerworks/cn/linux/l-cn-shell-debug/>
+
+###Advance skill
+================================================================================
+
+1.cursor moving
+
+	"\033[<L>;<C>H"  move curse to specify position, <L> is line number, <C> is crow number
+	"\033[<N>A"      move the current curse up N lines.(remember to replace <N> to digits)
+	"\033[<N>B"      move down
+	"\033[<N>C"      move right
+	"\033[<N>D"      move left
+
+2.change color
+
+	FGRED=`printf "\033[31m"`
+	FGCYAN=`printf "\033[36m"`
+	BGRED=`printf "\033[41m"`
+	FGBLUE=`printf "\033[35m"`
+	BGGREEN=`printf "\033[42m"`
+	 
+	NORMAL=`printf "\033[m"`
+	 
+	echo "${FGBLUE} Text in blue ${NORMAL}"
+	echo "Text normal"
+	echo "${BGRED} Background in red"
+	echo "${BGGREEN} Background in Green and back to Normal ${NORMAL}"
+
+	code color/编码 颜色/动作
+	0  重新设置属性到缺省设置
+	1  设置粗体
+	2  设置一半亮度（模拟彩色显示器的颜色）
+	4  设置下划线（模拟彩色显示器的颜色）
+	5  设置闪烁
+	7  设置反向图象
+	22 设置一般密度
+	24 关闭下划线
+	25 关闭闪烁
+	27 关闭反向图象
+	30 设置黑色前景
+	31 设置红色前景
+	32 设置绿色前景
+	33 设置棕色前景
+	34 设置蓝色前景
+	35 设置紫色前景
+	36 设置青色前景
+	37 设置白色前景
+	38 在缺省的前景颜色上设置下划线
+	39 在缺省的前景颜色上关闭下划线
+	40 设置黑色背景
+	41 设置红色背景
+	42 设置绿色背景
+	43 设置棕色背景
+	44 设置蓝色背景
+	45 设置紫色背景
+	46 设置青色背景
+	47 设置白色背景
+	49 设置缺省黑色背景
+
+reference:
+* [Linux的shell中echo改变输出显示样式](http://www.cnblogs.com/276815076/archive/2011/05/11/2043367.html)
+
 ###pdf
 ================================================================================
 reference:  
