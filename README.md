@@ -35,6 +35,53 @@ and run as this:
 	DEBUG=1 ./test.sh
 
 
+4. add text to the head of file, using `cat - $file`, link stdout to the head of $file  
+
+	file=data.txt
+	echo "test text to head of file" | cat - $file >$file.new
+
+5. merge two lines to one
+
+	sed 'N;s/\n/ /' 1.txt
+
+6. print the next line of match line
+
+	sed '/33/{n;p}' 1.txt
+
+7. merge all line to one
+
+	sed ':a;N;s/\n/ /;ba;' 1.txt
+
+8. print the last line
+
+	tail -n 1 1.txt
+	tail -1 1.txt
+	sed -n '$p' 1.txt
+	awk 'END{print}' 1.txt
+
+9. output multiple lines
+
+	cat <<TT-Test-111
+	This is line 1 of message
+	This is line 2 of message
+	This is line 3 of message
+	TT-Test-111
+
+10. comment block code, it is useful for debuging
+
+	: <<COMMENTBLOCK
+	# Test code here
+	echo "abc"
+	echo "123"
+	COMMENTBLOCK
+
+	: <<DEBUGXXX
+	for file in *
+	do
+	  cat "$file"
+	done
+	DEBUGXXX
+
 for more info:
 
 * <http://coolshell.cn/articles/1379.html>
@@ -52,6 +99,9 @@ for more info:
 	"\033[<N>D"      move left
 
 2.change color
+
+	syntax:
+		echo -e '\E[COLOR1;COLOR2mSome text goes here.'
 
 	FGRED=`printf "\033[31m"`
 	FGCYAN=`printf "\033[36m"`
@@ -97,8 +147,15 @@ for more info:
 	47 设置白色背景
 	49 设置缺省黑色背景
 
+	echo -e "\033[1mThis is bold text.\033[0m"
+	echo -e "\033[4mThis is underlined text.\033[0m"
+	echo -e '\E[34;47mThis prints in blue.'; tput sgr0
+	echo -e '\E[33;44m'"yellow text on blue background"; tput sgr0
+	echo -e '\E[1;33;44m'"BOLD yellow text on blue background"; tput sgr0
+
 reference:
 * [Linux的shell中echo改变输出显示样式](http://www.cnblogs.com/276815076/archive/2011/05/11/2043367.html)
+* [ABS-Guide 36.5. "Colorizing" Scripts]()
 
 ###pdf
 ================================================================================
