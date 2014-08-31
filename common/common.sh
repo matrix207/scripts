@@ -109,7 +109,9 @@ multiply ()
   local product=1
   until [ -z "$1" ] # Until uses up arguments passed...
   do 
-    let "product *= $1" 
+    #let "product *= $1" 
+    #For dash
+    product=$((product*$1))
     shift 
   done 
   echo $product # Will not echo to stdout,

@@ -15,5 +15,5 @@ debecho "123"
 debecho "abc"
 
 m1=10; m2=3; m3=5;
-#var1=`multiply $m1 $m2 $m3`
-#debecho $var1
+var1=`multiply $m1 $m2 $m3`
+debecho $var1
