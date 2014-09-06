@@ -82,6 +82,14 @@ and run as this:
 	done
 	DEBUGXXX
 
+11. array
+
+	DISKS=($(ls /dev/sd*))
+	LENGTH=${DISKS[@]}
+    for x in "${DISKS[@]}" ; do
+		echo $x
+	done
+
 for more info:
 
 * <http://coolshell.cn/articles/1379.html>
