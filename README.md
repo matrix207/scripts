@@ -211,3 +211,7 @@ Project MoniTor, for windows and linux platform
 ###sysmon
 ================================================================================
 System infor monitor (cpu,mem,ps,FD,network)
+
+###netspeed
+================================================================================
+Get network RT speed and NIC speed
