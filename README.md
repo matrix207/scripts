@@ -70,7 +70,6 @@ and run as this:
 10. comment block code, it is useful for debuging
 
 	: <<COMMENTBLOCK
-	# Test code here
 	echo "abc"
 	echo "123"
 	COMMENTBLOCK
@@ -89,6 +88,15 @@ and run as this:
     for x in "${DISKS[@]}" ; do
 		echo $x
 	done
+
+12. test expr is equal to [ expr ], for more help `man test`. some example:  
+
+	# This code is from /etc/init.d/nfs
+	# Source networking configuration.
+	[ -f /etc/sysconfig/network ] &&  . /etc/sysconfig/network
+	# Check that networking is up.
+	[ "${NETWORKING}" != "yes" ] && exit 6
+	[ -x /usr/sbin/rpc.nfsd ] || exit 5
 
 for more info:
 

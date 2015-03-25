@@ -1,25 +1,6 @@
 #!/bin/bash
 
 ############################################################
-# monitor system info
-#
-# How to auto run script
-#       1.run by crontab
-#         1.1.crontab -e 
-#             */10 * * * *  /root/dmon.sh
-#         1.2.service crond restart
-#       2.run /etc/rc.local
-#         echo "/root/dmon.sh &" >>/etc/rc.local
-#
-# History:
-#       2015-02-11  v0.3  Dennis  update
-#       2014-10-15  v0.2  Dennis  Add log /proc/pid/fd 
-#       2014-10-14  v0.1  Dennis  Create
-#
-# TODO:
-############################################################
-
-############################################################
 # Global configs
 ############################################################
 PROG=`basename $0`
@@ -67,6 +48,21 @@ log_sys() {
 }
 
 ############################################################
+# log io info
+############################################################
+log_io() {
+	log "log io info"
+	date +%F.%T.%N >>$LOG_PATH/iostat.log
+	# iostat 的第一次记录是从系统启动到当前时间的平均值，不  
+    # 能反映实时的io情况，所以要多次记录，从第二笔记录开始
+    # 参数意义: 
+    #    -x 统计详细信息
+    #    2  每隔2秒做一次统计
+    #    3  总共做3次统计
+	iostat -x 2 3 >>$LOG_PATH/iostat.log
+}
+
+############################################################
 # log network info
 ############################################################
 log_net() {
@@ -82,15 +78,6 @@ COMMENTBLOCK
 	netstat -rn >>$LOG_PATH/network.log
 	netstat -apn >>$LOG_PATH/network.log
 	ifconfig -a >>$LOG_PATH/network.log
-}
-
-############################################################
-# log io info
-############################################################
-log_io() {
-	log "log io info"
-	date +%F.%T.%N >>$LOG_PATH/iostat.log
-	iostat >>$LOG_PATH/iostat.log
 }
 
 ############################################################
@@ -151,16 +138,13 @@ log_iscsi() {
 		cat /proc/net/iet/session  >$iscsi_path/session
 		cat /proc/net/iet/volume >$iscsi_path/volume
 		netstat -anp | grep 3260 >$iscsi_path/iscsi_conninfo
+		local conn_ip=$(grep cid /proc/net/iet/session |awk -F' |:' '{print $4}')
+		if [ ! -z "$conn_ip" ]; then
+			ping -c 5 $conn_ip >$iscsi_path/ping
+		fi
 	fi	
 	cp -f /etc/{ietd.conf,initiators.allow,exports,krb5.conf,iscsi.user,initiators.deny,ietd.portal} $iscsi_path >&/dev/null
-}
-
-############################################################
-# log iscsi wireshark info
-############################################################
-log_iscsi_wireshark() {
-	#tcpdump -l port 3260 |tee $LOG_PATH/tcpdump.pcap
-	tcpdump -U port 3260 -w $LOG_PATH/tcpdump.pcap
+	tcpdump -U port 3260 -w $LOG_PATH/tcpdump.pcap &
 }
 
 ############################################################
@@ -187,4 +171,5 @@ do_log_loop() {
 # Main
 ############################################################
 log_prepare
+log_iscsi
 do_log_loop
