@@ -98,6 +98,14 @@ and run as this:
 	[ "${NETWORKING}" != "yes" ] && exit 6
 	[ -x /usr/sbin/rpc.nfsd ] || exit 5
 
+13. print function name:  
+
+	function test_func()
+	{
+		echo "Current $FUNCNAME, \$FUNCNAME => (${FUNCNAME[@]})"
+	}
+	test_func
+
 for more info:
 
 * <http://coolshell.cn/articles/1379.html>
